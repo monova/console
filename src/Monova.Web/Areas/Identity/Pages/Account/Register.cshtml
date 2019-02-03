@@ -3,11 +3,9 @@
 @{
     ViewData["Title"] = "Register";
 }
-
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="authentication-wrapper authentication-1 px-4">
+    <div class="authentication-inner py-5">
+        <section class="my-5">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h4>Create a new account.</h4>
             <hr />
@@ -28,7 +26,15 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
+                    <div class="bg-lightest text-muted small p-2 mt-4">
+          By clicking "Sign Up", you agree to our
+          <a href="javascript:void(0)">terms of service and privacy policy</a>. We’ll occasionally send you account related emails.
+        </div>
         </form>
+              <div class="text-center text-muted mt-4">
+                Already have an account? <a asp-page="./Login">Sign In</a>
+            </div>
+        </section>
     </div>
 </div>
 

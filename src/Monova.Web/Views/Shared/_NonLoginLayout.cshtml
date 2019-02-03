@@ -35,6 +35,7 @@
 
   <!-- `perfect-scrollbar` library required by SideNav plugin -->
   <link rel="stylesheet" href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="~/assets/vendor/css/pages/authentication.css">
 
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
@@ -42,59 +43,26 @@
 </head>
 
 <body>
-  
-  <!-- Layout wrapper -->
-  <div class="layout-wrapper layout-1">
-    <!-- Layout inner -->
-    <div class="layout-inner">
-
-      <!-- Layout navbar -->
-      <nav class="layout-navbar navbar navbar-expand-lg align-items-lg-center bg-navbar-theme container-p-x" id="layout-navbar">
-        <a href="index.html" class="navbar-brand">Monova</a>
-
-        <!-- Sidenav toggle -->
-        <div class="layout-sidenav-toggle navbar-nav align-items-lg-center mr-auto mr-lg-4">
-          <a class="nav-item nav-link px-0 ml-2" href="javascript:void(0)">
-            <i class="ion ion-md-menu text-large align-middle"></i>
-          </a>
-        </div>
-
-        <!-- Navbar toggle -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#layout-navbar-collapse">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="navbar-collapse collapse" id="layout-navbar-collapse">
-          <div class="navbar-nav align-items-lg-center">
-            <div class="nav-item"><a class="nav-link" href="#">Link 1</a></div>
-            <div class="nav-item"><a class="nav-link" href="#">Link 2</a></div>
-          </div>
-        </div>
-      </nav>
-      @RenderBody()
-    </div>
-    <!-- Layout inner -->
-
-    <div class="layout-overlay layout-sidenav-toggle"></div>
+   <div class="page-loader">
+    <div class="bg-primary"></div>
   </div>
-  <!-- / Layout wrapper -->
 
+  <!-- Content -->
+@RenderBody()
 
-    <script src="~/dist/vendor.js" asp-append-version="true"></script>
+  <!-- / Content -->
 
   <!-- Core scripts -->
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="~/assets/vendor/libs/popper/popper.js"></script>
   <script src="~/assets/vendor/js/bootstrap.js"></script>
   <script src="~/assets/vendor/js/sidenav.js"></script>
 
   <!-- Libs -->
-
-  <!-- `perfect-scrollbar` library required by SideNav plugin -->
   <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-  <!-- Main script -->
+  <!-- Demo -->
+  <script src="~/assets/js/demo.js"></script>
+
 
   <script src="~/assets/js/main.js"></script>
 
