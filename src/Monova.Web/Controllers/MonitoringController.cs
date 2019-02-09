@@ -3,12 +3,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Monova.Web.Controllers
 {
-    [Authorize]
-    public class MonitoringController : Controller
+    public class MonitoringController : ApiController
     {
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Get()
         {
-            return View();
+            return Json(new
+            {
+                Success = true,
+                Message = "Hi there!"
+            });
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]MonitoringModel value)
+        {
+            return Forbid();
+            // return Json(new
+            // {
+            //     Success = true,
+            //     Message = "I saved it.",
+            //     Data = value
+            // });
+        }
+    }
+
+    public class MonitoringModel
+    {
+        public string Name { get; set; }
+        public string Url { get; set; }
     }
 }
