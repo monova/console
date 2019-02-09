@@ -1,9 +1,46 @@
-import CounterExample from 'components/counter-example'
-import FetchData from 'components/fetch-data'
-import HomePage from 'components/home-page'
+import HomePage from 'components/pages/home-page';
+import MonitoringList from 'components/pages/monitoring/list';
+import MonitoringSave from 'components/pages/monitoring/save';
+import Forbidden from 'components/root/forbidden';
 
-export const routes = [
-  { name: 'home', path: '/', component: HomePage, display: 'Home', icon: 'home' },
-  { name: 'counter', path: '/counter', component: CounterExample, display: 'Counter', icon: 'graduation-cap' },
-  { name: 'fetch-data', path: '/fetch-data', component: FetchData, display: 'Fetch data', icon: 'list' }
-]
+export const routes = [{
+    name: 'monitoring-list',
+    path: '/monitoring/list',
+    component: MonitoringList,
+    display: 'Monitoring',
+    icon: 'chart-line'
+  },
+  {
+    divider: true,
+    path: ''
+  },
+  {
+    name: 'monitoring-save',
+    path: '/monitoring/save',
+    component: MonitoringSave,
+    display: 'New Monitoring',
+    icon: 'plus'
+  },
+  {
+    divider: true,
+    path: ''
+  },
+  {
+    name: 'account-view',
+    path: '/Identity/Account/Manage',
+    display: 'Account',
+    icon: 'user-circle'
+  },
+  {
+    name: 'account-subscription',
+    path: '/Subscription',
+    display: 'Subscription',
+    icon: 'credit-card'
+  },
+  {
+    name: 'forbidden',
+    path: '/forbidden',
+    hidden: true,
+    component: Forbidden
+  }
+];
