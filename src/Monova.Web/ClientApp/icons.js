@@ -14,7 +14,12 @@ fontawesome.library.add(
   // Brands
   require('@fortawesome/fontawesome-free-brands/faFontAwesome'),
   require('@fortawesome/fontawesome-free-brands/faMicrosoft'),
-  require('@fortawesome/fontawesome-free-brands/faVuejs')
+  require('@fortawesome/fontawesome-free-brands/faVuejs'),
+  // Monova
+  require('@fortawesome/fontawesome-free-solid/faPlus'),
+  require('@fortawesome/fontawesome-free-solid/faUserCircle'),
+  require('@fortawesome/fontawesome-free-solid/faCreditCard'),
+  require('@fortawesome/fontawesome-free-solid/faChartLine'),
 )
 
 export {
