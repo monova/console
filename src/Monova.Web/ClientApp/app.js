@@ -6,6 +6,9 @@ import { sync } from 'vuex-router-sync';
 import App from 'components/root/app-root';
 import { FontAwesomeIcon } from './icons';
 import PageHead from 'components/shared/page-head';
+import Notifications from 'vue-notification';
+
+Vue.use(Notifications);
 
 // Registration of global components
 Vue.component('icon', FontAwesomeIcon);

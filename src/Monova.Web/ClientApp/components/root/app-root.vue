@@ -10,6 +10,7 @@
     <nav-menu params="route: route"></nav-menu>
 
     <div class="layout-content">
+      <notifications />
       <!-- Page content -->
       <div class="container-fluid flex-grow-1 container-p-y">
         <router-view></router-view>

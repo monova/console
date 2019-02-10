@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from "@/router";
+import Vue from 'vue';
 
 export const http = axios.create({
   headers: {
@@ -11,7 +12,15 @@ export const http = axios.create({
 
 http.interceptors.response.use(
   function (response) {
-    return response
+    if (response.data) {
+      if (response.data.success && response.data.message) {
+        Vue.notify({
+          title: 'Success',
+          text: response.data.message
+        });
+      }
+    }
+    return response;
   },
   function (error) {
     const statusCode = error.response.status;
@@ -25,6 +34,14 @@ http.interceptors.response.use(
         name: "forbidden"
       });
       return new Promise(() => {});
+    }
+    const response = error.response;
+    if (!response.data.success && response.data.message) {
+      Vue.notify({
+        title: 'Error',
+        text: response.data.message,
+        type: 'error'
+      });
     }
 
     return Promise.reject(error);
