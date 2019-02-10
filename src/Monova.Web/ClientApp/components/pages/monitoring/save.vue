@@ -4,6 +4,10 @@
       icon="plus"
       title="New Monitoring"
     />
+    <input
+      type="text"
+      v-model="model.name"
+    />
     <button @click="save">
       Save
     </button>
@@ -13,11 +17,17 @@
 <script>
 import service from "service/monitoring";
 export default {
+  data() {
+    return {
+      model: {
+        name: ""
+      }
+    };
+  },
   methods: {
     async save() {
       var result = service.save({
-        name: "selcuk-ermaya",
-        url: "https://selcukermaya.com/"
+        name: this.model.name
       });
     }
   }
