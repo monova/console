@@ -1,4 +1,3 @@
-import HomePage from 'components/pages/home-page';
 import MonitoringList from 'components/pages/monitoring/list';
 import MonitoringSave from 'components/pages/monitoring/save';
 import Forbidden from 'components/root/forbidden';
