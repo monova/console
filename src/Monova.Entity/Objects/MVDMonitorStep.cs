@@ -21,4 +21,9 @@ namespace Monova.Entity
         HeaderExists = 3,
         BodyContains = 4,
     }
+
+    public class MVDSMonitorStepSettingsRequest
+    {
+        public string Url { get; set; }
+    }
 }
