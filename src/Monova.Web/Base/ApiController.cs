@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,16 @@ namespace Monova.Web
         private UserManager<MVDUser> _userManager;
         public UserManager<MVDUser> UserManager => _userManager ?? (UserManager<MVDUser>)HttpContext?.RequestServices.GetService(typeof(UserManager<MVDUser>));
 
+        public Guid UserId
+        {
+            get
+            {
+                var userId = UserManager.GetUserId(User);
+                return Guid.Parse(userId);
+            }
+        }
+
+        [NonAction]
         public IActionResult Success(string message = default(string), object data = default(object), int code = 200)
         {
             return Ok(
@@ -25,6 +36,7 @@ namespace Monova.Web
             );
         }
 
+        [NonAction]
         public IActionResult Error(string message = default(string), string internalMessage = default(string), object data = default(object), int code = 400, List<MVReturnError> errorMessages = null)
         {
             var rv = new MVReturn()
@@ -42,6 +54,8 @@ namespace Monova.Web
                 return Unauthorized();
             if (rv.Code == 403)
                 return Forbid();
+            if (rv.Code == 404)
+                return NotFound(rv);
 
             return BadRequest(rv);
         }
