@@ -4,20 +4,45 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Monova.Entity;
+using Newtonsoft.Json;
 
 namespace Monova.Web.Controllers
 {
     public class MonitoringController : ApiController
     {
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpGet("{id?}")]
+        public async Task<IActionResult> Get([FromRoute]Guid? id)
         {
+            if (id.HasValue)
+            {
+                if (id.Value == Guid.Empty)
+                {
+                    return Error("You must send monitor id to get.");
+                }
+
+                var monitor = await Db.Monitors.FirstOrDefaultAsync(x => x.MonitorId == id.Value && x.UserId == UserId);
+                if (monitor == null)
+                    return Error("Monitor not found.", code: 404);
+
+                return Success(data: new
+                {
+                    monitor.MonitorId,
+                    monitor.CreatedDate,
+                    monitor.LastCheckDate,
+                    monitor.MonitorStatus,
+                    monitor.Name,
+                    monitor.TestStatus,
+                    monitor.UpTime,
+                    monitor.UpdatedDate
+                });
+            }
+
             var list = await Db.Monitors.ToListAsync();
             return Success(null, list);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]MVDMonitor value)
+        public async Task<IActionResult> Post([FromBody]MVMMonitorSave value)
         {
             if (string.IsNullOrEmpty(value.Name))
             {
@@ -25,10 +50,27 @@ namespace Monova.Web.Controllers
             }
             var dataObject = new MVDMonitor
             {
+                MonitorId = Guid.NewGuid(),
                 CreatedDate = DateTime.UtcNow,
-                Name = value.Name
+                Name = value.Name,
+                UserId = UserId
             };
             Db.Monitors.Add(dataObject);
+
+            var monitorStepData = new MVDSMonitorStepSettingsRequest
+            {
+                Url = value.Url
+            };
+
+            var monitorStep = new MVDMonitorStep
+            {
+                MonitorStepId = Guid.NewGuid(),
+                Type = MVDMonitorStepTypes.Request,
+                MonitorId = dataObject.MonitorId,
+                Settings = JsonConvert.SerializeObject(monitorStepData)
+            };
+            Db.MonitorSteps.Add(monitorStep);
+
             var result = await Db.SaveChangesAsync();
             if (result > 0)
                 return Success("Monitoring saved successfully.", new
