@@ -5,19 +5,27 @@
       title="All Monitorings"
     />
     <div class="row">
-      <div class="col-md-12">
-        <div class="card mb-3 col-md-3" v-for="(item, index) in monitorings" :key="index">
+      <div
+        class="col-md-3"
+        v-for="(item, index) in monitorings"
+        :key="index"
+      >
+        <div class="card mr-4 mb-4">
           <img
-            class="card-img-top"
-            src="https://via.placeholder.com/512"
-            alt="Card image cap"
+            class="card-img-top shadow-sm"
+            src="https://api.apiflash.com/v1/urltoimage?access_key=1607d65bfb7543e19b50d13b5ae96dd5&url=http://selcukermaya.com/tr"
+            alt=""
           >
           <div class="card-body">
-            <h4 class="card-title">{{item.name}}</h4>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            <p class="card-text">
-              <small class="text-muted">Last updated 3 mins ago</small>
-            </p>
+            <h4 class="card-title">{{ item.name }}</h4>
+          </div>
+          <div class="card-body">
+            <router-link
+              :to="{name: 'monitoring-view', params:{id:item.monitorId}}"
+              class="card-link"
+            >
+              View Dashboard
+            </router-link>
           </div>
         </div>
       </div>

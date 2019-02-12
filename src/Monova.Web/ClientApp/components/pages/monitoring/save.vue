@@ -4,31 +4,46 @@
       icon="plus"
       title="New Monitoring"
     />
-    <input
-      type="text"
+    <mvi-text
+      title="Project Name"
+      placeholder="Type your project name"
       v-model="model.name"
     />
-    <button @click="save">
-      Save
+    <mvi-text
+      title="Project Url"
+      placeholder="Type your website url for test"
+      v-model="model.url"
+    />
+    <button
+      @click="save"
+      class="btn btn-success"
+    >
+      <icon icon="plus" /> Save
     </button>
   </div>
 </template>
 
 <script>
 import service from "service/monitoring";
+import router from "@/router";
+
 export default {
   data() {
     return {
       model: {
-        name: ""
+        name: "",
+        url: ""
       }
     };
   },
   methods: {
     async save() {
-      var result = service.save({
-        name: this.model.name
-      });
+      var result = await service.save(this.model);
+      if (result.success && result.data && result.data.id) {
+        router.push({
+          name: "monitoring-list"
+        });
+      }
     }
   }
 };
