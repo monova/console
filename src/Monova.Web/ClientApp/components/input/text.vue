@@ -7,6 +7,7 @@
         type="text"
         :placeholder="placeholder"
         class="form-control"
+        v-bind:value="value"
         v-on:input="$emit('input', $event.target.value)"
       ></div>
   </div>
@@ -15,6 +16,10 @@
 <script>
 export default {
   props: {
+    value: {
+      default: null,
+      type: String
+    },
     placeholder: {
       default: "",
       type: String
