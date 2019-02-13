@@ -142,9 +142,7 @@ export default {
   async mounted() {
     var result = await service.get(this.$route.params.id);
     if (result.success) {
-      setTimeout(() => {
-        this.item = result.data;
-      }, 3000);
+      this.item = result.data;
     }
   }
 };
