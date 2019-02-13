@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,17 @@ namespace Monova.Web.Controllers
                 if (monitor == null)
                     return Error("Monitor not found.", code: 404);
 
+                var url = string.Empty;
+                var monitorStepRequest = await Db.MonitorSteps.FirstOrDefaultAsync(x => x.MonitorId == monitor.MonitorId && x.Type == MVDMonitorStepTypes.Request);
+                if (monitorStepRequest != null)
+                {
+                    var requestSettings = monitorStepRequest.SettingsAsRequest();
+                    if (requestSettings != null)
+                    {
+                        url = requestSettings.Url;
+                    }
+                }
+
                 return Success(data: new
                 {
                     monitor.MonitorId,
@@ -33,7 +45,8 @@ namespace Monova.Web.Controllers
                     monitor.Name,
                     monitor.TestStatus,
                     monitor.UpTime,
-                    monitor.UpdatedDate
+                    monitor.UpdatedDate,
+                    Url = url
                 });
             }
 
@@ -48,34 +61,67 @@ namespace Monova.Web.Controllers
             {
                 return Error("Name is required.");
             }
-            var dataObject = new MVDMonitor
+
+            var monitorCheck = await Db.Monitors.AnyAsync(
+                x => x.MonitorId != value.Id && 
+                x.Name.Equals(value.Name) &&
+                x.UserId == UserId);
+
+            if (monitorCheck)
             {
-                MonitorId = Guid.NewGuid(),
-                CreatedDate = DateTime.UtcNow,
-                Name = value.Name,
-                UserId = UserId
-            };
-            Db.Monitors.Add(dataObject);
+                return Error("This project name is already in use. Please choose a different name.");
+            }
+
+            MVDMonitor data = null;
+            if (value.Id != Guid.Empty)
+            {
+                data = await Db.Monitors.FirstOrDefaultAsync(x => x.MonitorId == value.Id && x.UserId == UserId);
+                if (data == null) return Error("Monitor not found.");
+
+                data.UpdatedDate = DateTime.UtcNow;
+                data.Name = value.Name;
+            }
+            else
+            {
+                data = new MVDMonitor
+                {
+                    MonitorId = Guid.NewGuid(),
+                    CreatedDate = DateTime.UtcNow,
+                    Name = value.Name,
+                    UserId = UserId
+                };
+                Db.Monitors.Add(data);
+            }
 
             var monitorStepData = new MVDSMonitorStepSettingsRequest
             {
                 Url = value.Url
             };
 
-            var monitorStep = new MVDMonitorStep
+            var step = await Db.MonitorSteps.FirstOrDefaultAsync(x => x.MonitorId == data.MonitorId && x.Type == MVDMonitorStepTypes.Request);
+            if (step != null)
             {
-                MonitorStepId = Guid.NewGuid(),
-                Type = MVDMonitorStepTypes.Request,
-                MonitorId = dataObject.MonitorId,
-                Settings = JsonConvert.SerializeObject(monitorStepData)
+                var requestSettings = step.SettingsAsRequest() ?? new MVDSMonitorStepSettingsRequest();
+                requestSettings.Url = value.Url;
+                step.Settings = JsonConvert.SerializeObject(requestSettings);
+            }
+            else
+            {
+                step = new MVDMonitorStep
+                {
+                    MonitorStepId = Guid.NewGuid(),
+                    Type = MVDMonitorStepTypes.Request,
+                    MonitorId = data.MonitorId,
+                    Settings = JsonConvert.SerializeObject(monitorStepData)
+                };
+                Db.MonitorSteps.Add(step);
             };
-            Db.MonitorSteps.Add(monitorStep);
 
             var result = await Db.SaveChangesAsync();
             if (result > 0)
                 return Success("Monitoring saved successfully.", new
                 {
-                    Id = dataObject.MonitorId
+                    Id = data.MonitorId
                 });
             else
                 return Error("Something is wrong with your model.");
