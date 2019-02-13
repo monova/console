@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Monova.Entity
 {
@@ -12,6 +13,11 @@ namespace Monova.Entity
         public Guid MonitorId { get; set; }
         public MVDMonitorStepTypes Type { get; set; }
         public string Settings { get; set; }
+
+        public MVDSMonitorStepSettingsRequest SettingsAsRequest()
+        {
+            return JsonConvert.DeserializeObject<MVDSMonitorStepSettingsRequest>(Settings);
+        }
     }
 
     public enum MVDMonitorStepTypes : short
