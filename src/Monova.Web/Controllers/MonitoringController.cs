@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,75 @@ namespace Monova.Web.Controllers
 {
     public class MonitoringController : ApiController
     {
+        [NonAction]
+        private async Task<object> GetMonitorClientModel(MVDMonitor monitor)
+        {
+            var url = string.Empty;
+
+            var loadTime = 0.00;
+            var loadTimes = new List<double>();
+
+            var upTime = 0.00;
+            var downTime = 0.00;
+            var downTimePercent = 0.00;
+            var totalMonitoredTime = 0;
+            var upTimes = new List<double>();
+
+            var monitorStepRequest = await Db.MonitorSteps.FirstOrDefaultAsync(x => x.MonitorId == monitor.MonitorId && x.Type == MVDMonitorStepTypes.Request);
+            if (monitorStepRequest != null)
+            {
+                var requestSettings = monitorStepRequest.SettingsAsRequest();
+                if (requestSettings != null)
+                {
+                    url = requestSettings.Url;
+                }
+
+                var week = DateTime.UtcNow.AddDays(-14);
+                var logs = await Db.MonitorStepLogs
+                                .Where(x => x.MonitorStepId == monitorStepRequest.MonitorStepId && x.StartDate >= week)
+                                .OrderByDescending(x => x.StartDate)
+                                .ToListAsync();
+
+                if (logs.Any(x => x.Status == MVDMonitorStepStatusTypes.Success))
+                {
+                    loadTime = logs
+                                .Where(x => x.Status == MVDMonitorStepStatusTypes.Success)
+                                .Average(x => x.EndDate.Subtract(x.StartDate).TotalMilliseconds);
+                }
+
+                foreach (var log in logs)
+                {
+                    totalMonitoredTime += log.Interval;
+                    if (log.Status == MVDMonitorStepStatusTypes.Success)
+                        loadTimes.Add(log.EndDate.Subtract(log.StartDate).TotalMilliseconds);
+
+                    if (log.Status == MVDMonitorStepStatusTypes.Fail)
+                        downTime += log.Interval;
+                }
+
+                downTimePercent = 100 - (downTime / totalMonitoredTime) * 100;
+            }
+
+            return new
+            {
+                monitor.MonitorId,
+                monitor.CreatedDate,
+                monitor.LastCheckDate,
+                monitor.MonitorStatus,
+                monitor.Name,
+                monitor.TestStatus,
+                monitor.UpdatedDate,
+                url,
+                upTime,
+                upTimes,
+                downTime,
+                downTimePercent,
+                loadTime,
+                loadTimes,
+                totalMonitoredTime
+            };
+        }
+
         [HttpGet("{id?}")]
         public async Task<IActionResult> Get([FromRoute]Guid? id)
         {
@@ -25,32 +95,15 @@ namespace Monova.Web.Controllers
                 if (monitor == null)
                     return Error("Monitor not found.", code: 404);
 
-                var url = string.Empty;
-                var monitorStepRequest = await Db.MonitorSteps.FirstOrDefaultAsync(x => x.MonitorId == monitor.MonitorId && x.Type == MVDMonitorStepTypes.Request);
-                if (monitorStepRequest != null)
-                {
-                    var requestSettings = monitorStepRequest.SettingsAsRequest();
-                    if (requestSettings != null)
-                    {
-                        url = requestSettings.Url;
-                    }
-                }
-
-                return Success(data: new
-                {
-                    monitor.MonitorId,
-                    monitor.CreatedDate,
-                    monitor.LastCheckDate,
-                    monitor.MonitorStatus,
-                    monitor.Name,
-                    monitor.TestStatus,
-                    monitor.UpTime,
-                    monitor.UpdatedDate,
-                    Url = url
-                });
+                return Success(data: await GetMonitorClientModel(monitor));
             }
 
-            var list = await Db.Monitors.ToListAsync();
+            var list = await Db.Monitors.Where(x => x.UserId == UserId).ToListAsync();
+            var clientList = new List<object>();
+
+            foreach (var item in list)
+                clientList.Add(await GetMonitorClientModel(item));
+
             return Success(null, list);
         }
 
@@ -63,7 +116,7 @@ namespace Monova.Web.Controllers
             }
 
             var monitorCheck = await Db.Monitors.AnyAsync(
-                x => x.MonitorId != value.Id && 
+                x => x.MonitorId != value.Id &&
                 x.Name.Equals(value.Name) &&
                 x.UserId == UserId);
 
