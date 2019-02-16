@@ -15,11 +15,6 @@ namespace Monova.Entity
         public DateTime EndDate { get; set; }
         public MVDMonitorStepStatusTypes Status { get; set; }
         public string Log { get; set; }
-    }
-
-    public enum MVDMonitorStepStatusTypes : short
-    {
-        Fail = 0,
-        Success = 1
+        public int Interval { get; set; }
     }
 }
