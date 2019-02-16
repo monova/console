@@ -19,12 +19,12 @@
           ></apexchart>
           <div class="card-body">
             <h4 class="card-title d-flex justify-content-between align-items-center">{{ item.name }}
-              <div class="btn-grou">
+              <div class="btn-group">
                 <router-link
                   :to="{name: 'monitoring-view', params:{ id:item.monitorId }}"
                   class="btn btn-sm btn-secondary"
                 >
-                  View Dashboard
+                  Dashboard
                 </router-link>
                 <router-link
                   :to="{name: 'monitoring-save', params:{ id:item.monitorId }}"
