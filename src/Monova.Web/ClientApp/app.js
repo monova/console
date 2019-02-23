@@ -24,11 +24,15 @@ Vue.component('apexchart', VueApexCharts);
 // Input Controls
 import MVIText from 'components/input/text';
 
+// View Components
+import MVVMonitorStatus from 'components/shared/monitor-status';
+
 Vue.use(Notifications);
 
 // Registration of global components
 Vue.component('icon', FontAwesomeIcon);
 Vue.component('page-head', PageHead);
+Vue.component('mvv-monitor-status', MVVMonitorStatus);
 
 // Registration for Input Controls
 Vue.component('mvi-text', MVIText);
