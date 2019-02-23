@@ -30,7 +30,8 @@ namespace Monova.Entity
         Processing = 2,
         Success = 3,
         Warning = 4,
-        Fail = 5
+        Fail = 5,
+        Error = 6
     }
 
     public enum MVDMonitorStepTypes : short
