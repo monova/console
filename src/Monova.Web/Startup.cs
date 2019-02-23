@@ -65,10 +65,9 @@ namespace Monova.Web
             });
 
             // Add framework services.
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddSingleton<IMVService, MVSMonitoring>();
+            services.AddHostedService<MVBSMonitoring>();
 
             // Simple example with dependency injection for a data provider.
             // services.AddSingleton<Providers.IWeatherProvider, Providers.WeatherProviderFake>();
