@@ -26,6 +26,8 @@ namespace Monova.Web.Controllers
             var totalMonitoredTime = 0;
             var upTimes = new List<double>();
 
+            var stepStatus = MVDMonitorStepStatusTypes.Unknown;
+
             var monitorStepRequest = await Db.MonitorSteps.FirstOrDefaultAsync(x => x.MonitorId == monitor.MonitorId && x.Type == MVDMonitorStepTypes.Request);
             if (monitorStepRequest != null)
             {
@@ -39,7 +41,10 @@ namespace Monova.Web.Controllers
                 var logs = await Db.MonitorStepLogs
                                 .Where(x => x.MonitorStepId == monitorStepRequest.MonitorStepId && x.StartDate >= week)
                                 .OrderByDescending(x => x.StartDate)
+                                .Take(50)
                                 .ToListAsync();
+
+                logs = logs.OrderBy(x => x.StartDate).ToList();
 
                 if (logs.Any(x => x.Status == MVDMonitorStepStatusTypes.Success))
                 {
@@ -56,10 +61,23 @@ namespace Monova.Web.Controllers
 
                     if (log.Status == MVDMonitorStepStatusTypes.Fail)
                         downTime += log.Interval;
+
+                    var currentDowntimePercent = (downTime / totalMonitoredTime) * 100;
+                    var currentUptimePercent = 100 - currentDowntimePercent;
+
+                    upTimes.Add(double.IsNaN(currentUptimePercent) ? 0 : currentUptimePercent);
                 }
 
-                downTimePercent = 100 - (downTime / totalMonitoredTime) * 100;
+                var lastLog = logs.LastOrDefault();
+                if (lastLog != null)
+                    stepStatus = lastLog.Status;
+
+                downTimePercent = (downTime / totalMonitoredTime) * 100;
+                upTime = 100 - downTimePercent;
             }
+
+            if (double.IsNaN(upTime))
+                upTime = 0;
 
             return new
             {
@@ -77,7 +95,9 @@ namespace Monova.Web.Controllers
                 downTimePercent,
                 loadTime,
                 loadTimes,
-                totalMonitoredTime
+                totalMonitoredTime,
+                stepStatus,
+                stepStatusText = $"{stepStatus}"
             };
         }
 
@@ -104,7 +124,7 @@ namespace Monova.Web.Controllers
             foreach (var item in list)
                 clientList.Add(await GetMonitorClientModel(item));
 
-            return Success(null, list);
+            return Success(null, clientList);
         }
 
         [HttpPost]
@@ -165,7 +185,8 @@ namespace Monova.Web.Controllers
                     MonitorStepId = Guid.NewGuid(),
                     Type = MVDMonitorStepTypes.Request,
                     MonitorId = data.MonitorId,
-                    Settings = JsonConvert.SerializeObject(monitorStepData)
+                    Settings = JsonConvert.SerializeObject(monitorStepData),
+                    Interval = 10
                 };
                 Db.MonitorSteps.Add(step);
             };
