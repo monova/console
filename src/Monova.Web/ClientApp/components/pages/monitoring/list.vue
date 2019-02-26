@@ -122,49 +122,6 @@ export default {
           }
         }
       };
-    },
-    randomize() {
-      let arg = [
-        47,
-        45,
-        54,
-        38,
-        56,
-        24,
-        65,
-        31,
-        37,
-        39,
-        62,
-        51,
-        35,
-        41,
-        35,
-        27,
-        93,
-        53,
-        61,
-        27,
-        54,
-        43,
-        19,
-        46
-      ];
-      var array = arg.slice();
-      var currentIndex = array.length,
-        temporaryValue,
-        randomIndex;
-
-      while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
-
-      return array;
     }
   }
 };
