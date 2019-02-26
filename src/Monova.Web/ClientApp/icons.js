@@ -21,6 +21,7 @@ fontawesome.library.add(
   require('@fortawesome/fontawesome-free-solid/faCreditCard'),
   require('@fortawesome/fontawesome-free-solid/faChartLine'),
   require('@fortawesome/fontawesome-free-solid/faExternalLinkAlt'),
+  require('@fortawesome/fontawesome-free-solid/faSearch'),
 )
 
 export {

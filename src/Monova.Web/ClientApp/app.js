@@ -12,6 +12,13 @@ import {
 import PageHead from 'components/shared/page-head';
 import Notifications from 'vue-notification';
 
+import BootstrapVue from 'bootstrap-vue';
+
+Vue.use(BootstrapVue);
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+
 import VueContentPlaceholders from "vue-content-placeholders";
 
 Vue.use(VueContentPlaceholders)
@@ -28,6 +35,8 @@ import MVIText from 'components/input/text';
 import MVVMonitorStatus from 'components/shared/monitor-status';
 
 Vue.use(Notifications);
+
+Vue.use(require('vue-moment'));
 
 // Registration of global components
 Vue.component('icon', FontAwesomeIcon);
