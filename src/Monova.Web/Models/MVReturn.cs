@@ -19,6 +19,14 @@ namespace Monova.Web
         public List<MVReturnError> Errors { get; set; }
     }
 
+    public class MVReturnPagedData<T>
+    {
+        public List<T> Items { get; set; }
+        public int PageCount { get; set; }
+        public int ItemCount { get; set; }
+        public int CurrentPage { get; set; }
+    }
+
     public class MVReturnError
     {
         public string Message { get; set; }
