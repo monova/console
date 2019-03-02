@@ -6,7 +6,8 @@ export const http = axios.create({
   headers: {
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest",
-    "X-Application-Name": "vue"
+    "X-Application-Name": "vue",
+    "Accept-Type" : "application/json"
   }
 });
 

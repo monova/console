@@ -25,7 +25,7 @@ namespace Monova.Web
         [NonAction]
         public IActionResult Success(string message = default(string), object data = default(object), int code = 200)
         {
-            return Ok(
+            return Json(
                 new MVReturn()
                 {
                     Success = true,

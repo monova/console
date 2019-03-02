@@ -1,6 +1,7 @@
 import MonitoringList from 'components/pages/monitoring/list';
 import MonitoringSave from 'components/pages/monitoring/save';
 import MonitoringView from 'components/pages/monitoring/view';
+import SubscriptionView from 'components/pages/subscription/view';
 import Forbidden from 'components/root/forbidden';
 
 export const routes = [{
@@ -41,6 +42,7 @@ export const routes = [{
   {
     name: 'account-subscription',
     path: '/Subscription',
+    component: SubscriptionView,
     display: 'Subscription',
     icon: 'credit-card'
   },
