@@ -15,5 +15,9 @@ namespace Monova.Entity
         public DbSet<MVDMonitor> Monitors { get; set; }
         public DbSet<MVDMonitorStep> MonitorSteps { get; set; }
         public DbSet<MVDMonitorStepLog> MonitorStepLogs { get; set; }
+        public DbSet<MVDSubscription> Subscriptions { get; set; }
+        public DbSet<MVDSubscriptionFeature> SubscriptionFeatures { get; set; }
+        public DbSet<MVDSubscriptionType> SubscriptionTypes { get; set; }
+        public DbSet<MVDSubscriptionTypeFeature> SubscriptionTypeFeatures { get; set; }
     }
 }
