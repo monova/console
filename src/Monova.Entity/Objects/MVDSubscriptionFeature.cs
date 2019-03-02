@@ -9,6 +9,7 @@ namespace Monova.Entity
     {
         [Key]
         public Guid SubscriptionFeatureId { get; set; }
+        public Guid SubscriptionId { get; set; }
         public Guid SubscriptionTypeFeatureId { get; set; }
         public Guid SubscriptionTypeId { get; set; }
         public string Title { get; set; }
