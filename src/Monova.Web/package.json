@@ -27,6 +27,7 @@
     "vue-notification": "^1.3.16",
     "vue-router": "^3.0.2",
     "vue-server-renderer": "^2.6.7",
+    "vue-stripe-checkout": "^1.2.6",
     "vue-template-compiler": "^2.6.7",
     "vuex": "^2.5.0",
     "vuex-router-sync": "^4.3.2"

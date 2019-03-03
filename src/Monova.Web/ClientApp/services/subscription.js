@@ -23,8 +23,8 @@ const SubscriptionService = {
     }
   },
 
-  async subscribe(id) {
-    var result = await http.post("/api/v1/subscription/" + id);
+  async subscribe(id, token) {
+    var result = await http.post(`/api/v1/subscription/${id}?token=${token}`);
     if (result.status === 200) {
       return result.data;
     } else {

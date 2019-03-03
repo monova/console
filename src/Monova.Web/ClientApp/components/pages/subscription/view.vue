@@ -35,18 +35,37 @@
             </div>
             <div class="pb-5">
               <p
-                v-for="feature in item.features"
-                :key="item.id+'-'+feature.name"
+                v-for="(feature,index) in item.features"
+                :key="item.id+'-'+index"
                 class="ui-company-text mb-2"
               >{{feature.value}} {{feature.title}}</p>
             </div>
           </div>
-          <div class="px-md-3 px-lg-5">
-            <button @click="subscribe(item.id)" class="btn btn-outline-success">Upgrade</button>
+          <div
+            class="px-md-3 px-lg-5"
+            v-if="subscription == null || item.id != subscription.typeId"
+          >
+            <button @click="subscribe(item)" class="btn btn-outline-success">
+              <icon icon="credit-card"/>Subscribe
+            </button>
+          </div>
+          <div class="px-md-3 px-lg-5" v-else>
+            <p class="text-success">You already have this subscription</p>
           </div>
         </div>
       </div>
     </div>
+    <vue-stripe-checkout
+      ref="checkoutRef"
+      :name="selectedSubscription.title"
+      :description="selectedSubscription.description"
+      :email="selectedSubscription.email"
+      currency="usd"
+      :amount="selectedSubscription.price"
+      :allow-remember-me="false"
+      @done="paymentDone"
+      @canceled="paymentCanceled"
+    />
   </div>
 </template>
 
@@ -57,6 +76,13 @@ export default {
   data() {
     return {
       subscription: null,
+      selectedSubscription: {
+        id: "",
+        price: 0,
+        description: "",
+        title: "",
+        email: "selcukermaya@gmail.com"
+      },
       subscriptions: []
     };
   },
@@ -67,15 +93,31 @@ export default {
     await this.current();
   },
   methods: {
-    async subscribe(id) {
-      const result = await service.subscribe(id);
-      if (result.data) {
-        await this.current();
-      }
+    async subscribe(subscription) {
+      this.selectedSubscription.id = subscription.id;
+      this.selectedSubscription.title = subscription.title;
+      this.selectedSubscription.price = subscription.price * 100;
+      this.selectedSubscription.description = subscription.description;
+      setTimeout(async () => {
+        const { token, args } = await this.$refs.checkoutRef.open();
+      }, 100);
     },
     async current() {
       const current = await service.current();
       this.subscription = current.data;
+    },
+
+    async paymentDone({ token, args }) {
+      const result = await service.subscribe(
+        this.selectedSubscription.id,
+        token.id
+      );
+      if (result.data) {
+        await this.current();
+      }
+    },
+    paymentCanceled() {
+      // do stuff
     }
   }
 };

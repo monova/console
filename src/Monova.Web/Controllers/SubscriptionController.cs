@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Monova.Entity;
+using Stripe;
 
 namespace Monova.Web.Controllers
 {
@@ -44,7 +45,7 @@ namespace Monova.Web.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> Post([FromRoute]Guid id)
+        public async Task<IActionResult> Post([FromRoute]Guid id, [FromQuery]string token)
         {
             if (id != Guid.Empty)
             {
@@ -94,6 +95,55 @@ namespace Monova.Web.Controllers
                             ValueUsed = string.Empty,
                             ValueRemained = string.Empty
                         });
+                    }
+                }
+
+                if (subscriptionType.Price > 0)
+                {
+                    try
+                    {
+                        var user = await Db.Users.FirstOrDefaultAsync(x => x.Id == UserId);
+                        var customerService = new CustomerService();
+                        var customerResult = await customerService.CreateAsync(new CustomerCreateOptions
+                        {
+                            Email = user.Email,
+                            SourceToken = token
+                        });
+
+                        var items = new List<SubscriptionItemOption> {
+                            new SubscriptionItemOption {PlanId = subscriptionType.Name}
+                        };
+                        var subscriptionService = new SubscriptionService();
+                        var subscriptionOptions = new SubscriptionCreateOptions
+                        {
+                            CustomerId = customerResult.Id,
+                            Items = items
+                        };
+                        var subscriptionResult = await subscriptionService.CreateAsync(subscriptionOptions);
+                        if (subscriptionResult.Status == "active")
+                        {
+                            var payment = new MVDPayment
+                            {
+                                PaymentId = Guid.NewGuid(),
+                                Provider = "stripe",
+                                SubscriptionId = subscription.SubscriptionId,
+                                UserId = UserId,
+                                Token = subscriptionResult.LatestInvoiceId,
+                                Amount = subscriptionType.Price,
+                                Currency = "usd",
+                                Date = DateTime.UtcNow,
+                                Description = $"{subscriptionType.Title} {subscriptionType.Description}",
+                            };
+                            await Db.AddAsync(payment);
+                        }
+                        else
+                        {
+                            return Error("Payment not completed.", code: 400);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Error("Payment error. Please check your credit card and details.", internalMessage: ex.Message, code: 400);
                     }
                 }
 

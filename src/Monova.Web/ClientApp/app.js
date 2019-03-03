@@ -13,8 +13,11 @@ import PageHead from 'components/shared/page-head';
 import Notifications from 'vue-notification';
 
 import BootstrapVue from 'bootstrap-vue';
-
 Vue.use(BootstrapVue);
+
+// Stripe
+import VueStripeCheckout from 'vue-stripe-checkout';
+Vue.use(VueStripeCheckout, 'pk_test_uNX6QOh0WBptJmL8r821odyW');
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
