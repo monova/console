@@ -25,11 +25,11 @@ namespace Monova.Web.Controllers
                     Description = "Free for starter users."
                 };
                 await Db.AddAsync(subscriptionTypeFree);
-                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, "monitor", "MONITOR", "1");
-                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, "monitor step", "MONITOR_STEP", "1");
-                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, "user", "USER", "1");
-                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, "interval", "INTERVAL", "300");
-                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, "alert channel", "ALERT_CHANNEL", "1");
+                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, 1, "monitor", "MONITOR", "1");
+                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, 2, "monitor step", "MONITOR_STEP", "1");
+                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, 3, "user", "USER", "1");
+                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, 4, "interval", "INTERVAL", "300");
+                await AddFeature(subscriptionTypeFree.SubscriptionTypeId, 5, "alert channel", "ALERT_CHANNEL", "1");
                 // Startup
                 var subscriptionTypeStartup = new MVDSubscriptionType
                 {
@@ -41,11 +41,11 @@ namespace Monova.Web.Controllers
                     Description = "For startups."
                 };
                 await Db.AddAsync(subscriptionTypeStartup);
-                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, "monitor", "MONITOR", "5");
-                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, "monitor step", "MONITOR_STEP", "10");
-                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, "user", "USER", "1");
-                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, "interval", "INTERVAL", "300");
-                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, "alert channel", "ALERT_CHANNEL", "2");
+                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, 1, "monitor", "MONITOR", "5");
+                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, 2, "monitor step", "MONITOR_STEP", "10");
+                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, 3, "user", "USER", "1");
+                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, 4, "interval", "INTERVAL", "300");
+                await AddFeature(subscriptionTypeStartup.SubscriptionTypeId, 5, "alert channel", "ALERT_CHANNEL", "2");
                 // Premium
                 var subscriptionTypePremium = new MVDSubscriptionType
                 {
@@ -57,11 +57,11 @@ namespace Monova.Web.Controllers
                     Description = "For growing companies."
                 };
                 await Db.AddAsync(subscriptionTypePremium);
-                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, "monitor", "MONITOR", "25");
-                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, "monitor step", "MONITOR_STEP", "100");
-                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, "user", "USER", "5");
-                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, "interval", "INTERVAL", "60");
-                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, "alert channel", "ALERT_CHANNEL", "5");
+                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, 1, "monitor", "MONITOR", "25");
+                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, 2, "monitor step", "MONITOR_STEP", "100");
+                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, 3, "user", "USER", "5");
+                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, 4, "interval", "INTERVAL", "60");
+                await AddFeature(subscriptionTypePremium.SubscriptionTypeId, 5, "alert channel", "ALERT_CHANNEL", "5");
                 // Enterprise
                 var subscriptionTypeEnterprise = new MVDSubscriptionType
                 {
@@ -73,11 +73,11 @@ namespace Monova.Web.Controllers
                     Description = "For enterprise companies."
                 };
                 await Db.AddAsync(subscriptionTypeEnterprise);
-                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, "monitor", "MONITOR", "100");
-                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, "monitor step", "MONITOR_STEP", "250");
-                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, "user", "USER", "25");
-                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, "interval", "INTERVAL", "60");
-                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, "alert channel", "ALERT_CHANNEL", "*");
+                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, 1, "monitor", "MONITOR", "100");
+                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, 2, "monitor step", "MONITOR_STEP", "250");
+                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, 3, "user", "USER", "25");
+                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, 4, "interval", "INTERVAL", "60");
+                await AddFeature(subscriptionTypeEnterprise.SubscriptionTypeId, 5, "alert channel", "ALERT_CHANNEL", "*");
 
                 if (await Db.SaveChangesAsync() > 0)
                 {
@@ -88,7 +88,7 @@ namespace Monova.Web.Controllers
         }
 
         [NonAction]
-        private async Task AddFeature(Guid typeId, string title, string name, string value)
+        private async Task AddFeature(Guid typeId, short sort, string title, string name, string value)
         {
             await Db.AddAsync(new MVDSubscriptionTypeFeature
             {
@@ -98,7 +98,8 @@ namespace Monova.Web.Controllers
                 IsFeature = true,
                 Name = name,
                 Title = title,
-                Value = value
+                Value = value,
+                Sort = sort
             });
         }
     }
