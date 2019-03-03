@@ -19,5 +19,6 @@ namespace Monova.Entity
         public DbSet<MVDSubscriptionFeature> SubscriptionFeatures { get; set; }
         public DbSet<MVDSubscriptionType> SubscriptionTypes { get; set; }
         public DbSet<MVDSubscriptionTypeFeature> SubscriptionTypeFeatures { get; set; }
+        public DbSet<MVDPayment> Payments { get; set; }
     }
 }
