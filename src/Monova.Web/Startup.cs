@@ -24,9 +24,16 @@ namespace Monova.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // "Server=postgres;Port=5432;Database=monova;User Id=postgres;Password=1234567890;"
+            var connectionString = Environment.GetEnvironmentVariable("MONOVA_CONNECTIONSTRING");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                Console.WriteLine("Connection string is not found in environment variable 'MONOVA_CONNECTIONSTRING'. I'm using default connection string.");
+                connectionString = "Server=localhost;Port=5432;Database=monova;User Id=postgres;Password=1234567890;";
+            }
             StripeConfiguration.SetApiKey("sk_test_eySzoJ8RqEkrZB3evgiLzGDx");
             services.AddDbContext<MVDContext>(
-                options => options.UseNpgsql("Server=localhost;Port=5432;Database=monova;User Id=postgres;Password=1234567890;")
+                options => options.UseNpgsql(connectionString)
             );
 
             services
