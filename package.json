@@ -10,7 +10,8 @@
     "scripts": {
         "dev": "cd ./src/Monova.Web && cross-env ASPNETCORE_ENVIRONMENT=Development NODE_ENV=development dotnet watch run",
         "db-migrate": "cd ./src/Monova.Entity/ && dotnet ef migrations add --startup-project=../Monova.Web",
-        "db-update": "cd ./src/Monova.Entity/ && dotnet ef database update --startup-project=../Monova.Web"
+        "db-update": "cd ./src/Monova.Entity/ && dotnet ef database update --startup-project=../Monova.Web",
+        "docker": "docker build -t monova/console ."
     },
     "devDependencies": {
         "cross-env": "^5.2.0"
