@@ -95,7 +95,13 @@
   <script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
   <!-- Main script -->
-
+  <script>
+    var monova = {
+      config : {
+        stripePublicKey: "@Startup.Config.StripePublicKey"
+      }
+    };
+  </script>
   <script src="~/assets/js/main.js"></script>
 
     @RenderSection("scripts", required: false)

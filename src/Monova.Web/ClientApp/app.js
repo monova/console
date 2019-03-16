@@ -17,7 +17,7 @@ Vue.use(BootstrapVue);
 
 // Stripe
 import VueStripeCheckout from 'vue-stripe-checkout';
-Vue.use(VueStripeCheckout, 'pk_test_uNX6QOh0WBptJmL8r821odyW');
+Vue.use(VueStripeCheckout, monova.config.stripePublicKey);
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
