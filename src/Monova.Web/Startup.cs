@@ -14,6 +14,11 @@ namespace Monova.Web
 {
     public class Startup
     {
+        public static class Config
+        {
+            public static string StripePublicKey { get; set; }
+        }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,17 +29,21 @@ namespace Monova.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // "Server=postgres;Port=5432;Database=monova;User Id=postgres;Password=1234567890;"
-            var connectionString = Environment.GetEnvironmentVariable("MONOVA_CONNECTIONSTRING");
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                Console.WriteLine("Connection string is not found in environment variable 'MONOVA_CONNECTIONSTRING'. I'm using default connection string.");
-                connectionString = "Server=localhost;Port=5432;Database=monova;User Id=postgres;Password=1234567890;";
-            }
-            StripeConfiguration.SetApiKey("sk_test_eySzoJ8RqEkrZB3evgiLzGDx");
+            var connectionString = Environment.GetEnvironmentVariable(Keys.ConnectionString);
+            var stripePublicKey = Environment.GetEnvironmentVariable(Keys.StripePublicKey);
+            var stripeApiKey = Environment.GetEnvironmentVariable(Keys.StripeApiKey);
+            StripeConfiguration.SetApiKey(stripeApiKey);
+
+            Config.StripePublicKey = stripePublicKey;
+
             services.AddDbContext<MVDContext>(
                 options => options.UseNpgsql(connectionString)
             );
+
+            var scopeFactory = services.BuildServiceProvider().GetRequiredService<IServiceScopeFactory>();
+            using (var scope = scopeFactory.CreateScope())
+            using (var db = scope.ServiceProvider.GetRequiredService<MVDContext>())
+                db.Database.Migrate();
 
             services
                 .AddDefaultIdentity<MVDUser>()
