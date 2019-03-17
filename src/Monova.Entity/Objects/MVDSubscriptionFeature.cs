@@ -18,5 +18,7 @@ namespace Monova.Entity
         public string Value { get; set; }
         public string ValueUsed { get; set; }
         public string ValueRemained { get; set; }
+
+        public virtual MVDSubscriptionTypeFeature SubscriptionTypeFeature { get; set; }
     }
 }
