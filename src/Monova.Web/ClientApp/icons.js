@@ -13,6 +13,8 @@ fontawesome.library.add(
   require('@fortawesome/fontawesome-free-solid/faSpinner'),
   require('@fortawesome/fontawesome-free-solid/faEdit'),
   require('@fortawesome/fontawesome-free-solid/faExclamationTriangle'),
+  require('@fortawesome/fontawesome-free-solid/faBell'),
+  require('@fortawesome/fontawesome-free-solid/faCheck'),
   // Brands
   require('@fortawesome/fontawesome-free-brands/faFontAwesome'),
   require('@fortawesome/fontawesome-free-brands/faMicrosoft'),
