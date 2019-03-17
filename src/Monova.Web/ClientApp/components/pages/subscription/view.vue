@@ -4,16 +4,23 @@
       <div class="card mb-4" v-if="subscription">
         <div class="card-body">
           <h4 class="card-title">
-            <strong>Free</strong>
+            <strong>{{ subscription.title }}</strong>
           </h4>
           <div
             class="card-subtitle text-muted mb-3"
-          >Current subscription ({{subscription.paymentPeriodText}})</div>
+          >Current subscription is {{ subscription.title }} ({{subscription.paymentPeriodText}})</div>
           <ul>
             <li
               v-for="(f, index) in subscription.features"
               :key="'feature-'+index"
-            >{{f.valueUsed}}/{{f.value}} {{ f.title }}</li>
+            >
+              <span v-if="f.valueUsed && f.valueRemained">
+                {{f.valueUsed}}/{{f.value}} {{ f.title }}
+              </span>
+              <span v-else>
+                {{f.value}} {{f.title}}
+              </span>
+            </li>
           </ul>
         </div>
       </div>
