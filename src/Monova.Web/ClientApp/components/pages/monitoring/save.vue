@@ -62,7 +62,6 @@ export default {
     } else {
       this.loading = false;
       this.subscription = (await serviceSubscription.current()).data;
-      console.log(this.subscription);
       this.feature = this.subscription.features.find(
         x => x.name === "MONITOR"
       );
@@ -70,7 +69,6 @@ export default {
       if (this.feature) {
         const valueRemained = parseInt(this.feature.valueRemained);
         this.noquota = !valueRemained || valueRemained <= 0;
-        debugger;
       }
     }
   },

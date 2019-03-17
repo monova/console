@@ -6,18 +6,25 @@
         <div class="card mr-2 ml-2 mb-4 monitor-card">
           <div class="card-header pr-3 pl-3 d-flex">
             <div class="card-title mb-0 with-elements">
-              <router-link :to="{name:'monitoring-view', params: {id:item.monitorId}}">
-                <icon icon="chart-line"/>
-                {{item.name}}
-              </router-link>
+              <mvv-monitor-status :status="item.stepStatus" :title="item.stepStatusText"/>&nbsp;
+              <router-link :to="{name:'monitoring-view', params: {id:item.monitorId}}">{{item.name}}</router-link>
               <div class="card-title-elements ml-md-auto">
                 <router-link
-                  class="hover-show"
+                  v-b-tooltip
+                  title="Edit"
+                  class="hover-show btn btn-sm btn-outline-secondary"
                   :to="{name:'monitoring-save', params: {id:item.monitorId}}"
                 >
-                  <icon icon="edit"/>Edit
+                  <icon icon="edit"/>
                 </router-link>
-                <mvv-monitor-status :status="item.stepStatus" :title="item.stepStatusText"/>
+                <router-link
+                  v-b-tooltip
+                  title="Alerts"
+                  class="btn btn-sm btn-outline-danger"
+                  :to="{name:'monitoring-alerts', params: {id:item.monitorId}}"
+                >
+                  <icon icon="bell"/>
+                </router-link>
               </div>
             </div>
           </div>

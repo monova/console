@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span :class="'badge badge-'+badgeClass">{{title}}</span>
+    <span v-b-tooltip :title="title" :class="'badge badge-'+badgeClass">{{title.substr(0,1)}}</span>
   </div>
 </template>
 
