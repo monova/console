@@ -37,7 +37,7 @@ namespace Monova.Web
                     var steps = await db.MonitorSteps
                                         .Where(x =>
                                             x.Type == MVDMonitorStepTypes.Request && x.Status != MVDMonitorStepStatusTypes.Processing &&
-                                            x.LastCheckDate.AddSeconds(x.Interval) > DateTime.UtcNow
+                                            DateTime.UtcNow > x.LastCheckDate.AddSeconds(x.Interval)
                                         )
                                         .OrderBy(x => x.LastCheckDate)
                                         .Take(20)
