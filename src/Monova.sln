@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monova.Web", "Monova.Web\Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monova.Entity", "Monova.Entity\Monova.Entity.csproj", "{8891C648-E3C4-4711-BC53-907BCE047946}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monova.Web.Tests", "..\test\Monova.Web.Tests\Monova.Web.Tests.csproj", "{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{8891C648-E3C4-4711-BC53-907BCE047946}.Release|x64.Build.0 = Release|Any CPU
 		{8891C648-E3C4-4711-BC53-907BCE047946}.Release|x86.ActiveCfg = Release|Any CPU
 		{8891C648-E3C4-4711-BC53-907BCE047946}.Release|x86.Build.0 = Release|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Debug|x64.Build.0 = Debug|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Debug|x86.Build.0 = Debug|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Release|x64.ActiveCfg = Release|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Release|x64.Build.0 = Release|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{4D866FA7-6C6D-4E49-A04B-937CF84A95C1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
